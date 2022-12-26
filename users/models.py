@@ -2,11 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import CustomUserManager
 
-from cpf_field.models import CPFField
 # Create your models here.
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    cpf = CPFField('CPF', help_text='Informe o CPF', unique=True)
+    cpf = models.CharField('CPF', max_length=11, help_text='Informe o CPF', unique=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em', auto_now=True)

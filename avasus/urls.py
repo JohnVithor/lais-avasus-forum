@@ -16,6 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from rest_framework import routers
+
+from users import views as user_views
+from forum import views as forum_views
+
+router = routers.DefaultRouter()
+router.register(r'users', user_views.UserViewSet)
+router.register(r'categories', forum_views.CategoryViewSet)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    # path('users/', views.UserViewSet.as_view({'get': 'retrieve'})),
+    # path('groups/', views.GroupViewSet.as_view({'get': 'retrieve'}))
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+] + router.urls
