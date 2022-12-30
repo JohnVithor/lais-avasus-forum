@@ -29,6 +29,7 @@ class SubForum(models.Model):
 class Topic(models.Model):
     title = models.CharField('Título', max_length=120, help_text='Informe o título do tópico')
     content = models.TextField('Conteúdo', help_text='Informe o conteúdo do tópico')
+    subforum = models.ForeignKey(SubForum, on_delete=models.CASCADE)
 
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     is_closed = models.BooleanField('Trancado', default=False, help_text='Indica se o tópico está trancado')

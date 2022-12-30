@@ -25,6 +25,8 @@ from forum import views as forum_views
 router = routers.DefaultRouter()
 router.register(r'users', user_views.UserViewSet)
 router.register(r'categories', forum_views.CategoryViewSet)
+router.register(r'subforuns', forum_views.SubForumViewSet)
+router.register(r'topics', forum_views.TopicViewSet)
 
 
 urlpatterns = [
