@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .managers import CustomUserManager
+from datetime import date
 
 # Create your models here.
 
@@ -53,6 +54,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name', 'social_name', 'birth_date', 'state', 'city']
 
     objects = CustomUserManager()
+
+    @property
+    def age(self):
+        return int((date.today() - self.birth_date).days / 365.25)
 
     def __str__(self):
         return self.name + " - " + self.cpf

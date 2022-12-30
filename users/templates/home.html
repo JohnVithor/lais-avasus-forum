@@ -5,10 +5,41 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    Hi {{ user.name }}!
+    {% if user.is_staff %}
+        Olá Professor {{ user.name }}!
+    {% else %}
+        Olá aluno {{ user.name }}!
+    {% endif %}  
+    <br/>
+    CPF: {{ user.cpf }}
+    <br/>
+    Data de nascimento: {{ user.birth_date }}
+    <br/>
+    Idade: {{ user.age }} anos
+    <br/>
     <button type="button">
         <a href="{% url 'logout' %}">Log Out</a>
-    </button>
+    </button>  
+    <br/>
+    Subfóruns associados:
+    <br/>
+    {% if user.is_staff %}
+        {% for field in user.created_subforuns.all %}
+            {{ field }}
+            <br/>
+        {% endfor %}
+        <br/>
+        <button type="button">
+            <!-- <a href="{% url 'logout' %}">Cadastrar novo forum</a> -->
+            <a href="">Cadastrar novo forum</a>
+        </button> 
+    {% else %}
+        {% for field in user.subforum_set.all %}
+            {{ field }}
+            <br/>
+        {% endfor %}
+        <br/>
+    {% endif %}  
 {% else %}
     <p>Você não está logado</p>
     <button type="button">
