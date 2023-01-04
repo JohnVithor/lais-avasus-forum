@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, SubForum, Topic
+from .models import Category, SubForum, Topic, TopicResponse
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -18,4 +18,10 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Topic
         fields = ['title', 'content', 'subforum', 'creator', 'is_closed', 'is_active', 'created_at', 'updated_at']
+        ordering = ['-id']
+
+class TopicResponseSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TopicResponse
+        fields = ['content', 'topic', 'creator', 'is_active', 'created_at']
         ordering = ['-id']
