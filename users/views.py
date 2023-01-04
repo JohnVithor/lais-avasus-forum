@@ -4,6 +4,8 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import generic
 
 from .forms import StudentRegisterForm
 
@@ -17,10 +19,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-created_at')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-from django.urls import reverse_lazy
-from django.views import generic
-
 
 class SignUpView(generic.CreateView):
     form_class = StudentRegisterForm
