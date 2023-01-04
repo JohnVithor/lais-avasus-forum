@@ -25,6 +25,10 @@ class SubForum(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    @property
+    def sorted_topics(self):
+        return self.topic_set.order_by('-created_at')
 
 class Topic(models.Model):
     title = models.CharField('Título', max_length=120, help_text='Informe o título do tópico')
@@ -40,3 +44,17 @@ class Topic(models.Model):
     
     def __str__(self) -> str:
         return self.title
+
+    @property
+    def sorted_responses(self):
+        return self.topicresponse_set.order_by('-created_at')
+
+class TopicResponse(models.Model):
+    content = models.TextField('Resposta', help_text='Informe a resposta ao tópico')
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+
+    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    
+    def __str__(self) -> str:
+        return self.content

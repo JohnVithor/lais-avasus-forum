@@ -60,4 +60,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return int((date.today() - self.birth_date).days / 365.25)
 
     def __str__(self):
-        return self.name + " - " + self.cpf
+        return self.name if self.social_name == '' else self.social_name 
