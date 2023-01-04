@@ -9,6 +9,10 @@
 <p><strong>Criado em:</strong> {{ object.created_at }}</p>
 <p><strong>Descrição:</strong> {{ object.description }}</p>
 <p><strong>Quantidade de tópicos:</strong> {{ object.topic_set.all.count }}</p>
+{% if user.is_staff %}
+<p><strong>Quantidade de alunos vinculados:</strong> {{ object.students.all.count }}</p>
+<p><strong>Quantidade de postagens em todos os tópicos:</strong> {{ object.qtd_posts }}</p>
+{% endif %}  
 <table>
   <tr>
     <th>Titúlo</th>

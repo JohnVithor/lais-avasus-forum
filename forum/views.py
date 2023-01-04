@@ -1,8 +1,11 @@
 from rest_framework import viewsets, permissions
-from django.utils import timezone
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
 from .serializers import CategorySerializer, SubForumSerializer, TopicSerializer
 from .models import Category, SubForum, Topic
+from .forms import SubForumRegisterForm
+from django.urls import reverse_lazy
+
 # Create your views here.
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -38,3 +41,25 @@ class SubForumDetailView(DetailView):
 class TopicDetailView(DetailView):
     model = Topic
     template_name = 'forum/topic-detail.html'
+
+class SubForumFormCreateView(CreateView):
+    model = SubForum
+    form_class = SubForumRegisterForm
+    template_name = 'forum/subforum-register.html'
+    success_url = reverse_lazy("home")
+
+    def get_form_kwargs(self):
+       kwargs = super(SubForumFormCreateView, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs
+    
+class SubForumFormEditView(UpdateView):
+    model = SubForum
+    form_class = SubForumRegisterForm
+    template_name = 'forum/subforum-register.html'
+    success_url = reverse_lazy("home")
+
+    def get_form_kwargs(self):
+       kwargs = super(SubForumFormEditView, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs

@@ -29,6 +29,13 @@ class SubForum(models.Model):
     @property
     def sorted_topics(self):
         return self.topic_set.order_by('-created_at')
+    
+    @property
+    def qtd_posts(self):
+        qtd = 0
+        for topic in self.topic_set.all():
+            qtd += topic.topicresponse_set.all().count()
+        return qtd
 
 class Topic(models.Model):
     title = models.CharField('Título', max_length=120, help_text='Informe o título do tópico')
