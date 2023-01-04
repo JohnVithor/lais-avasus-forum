@@ -23,10 +23,10 @@ from users import views as user_views
 from forum import views as forum_views
 
 router = routers.DefaultRouter()
-router.register(r'users', user_views.UserViewSet)
-router.register(r'categories', forum_views.CategoryViewSet)
-router.register(r'subforuns', forum_views.SubForumViewSet)
-router.register(r'topics', forum_views.TopicViewSet)
+router.register(r'api/users', user_views.UserViewSet)
+router.register(r'api/categories', forum_views.CategoryViewSet)
+router.register(r'api/subforuns', forum_views.SubForumViewSet)
+router.register(r'api/topics', forum_views.TopicViewSet)
 
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("users.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("forum/", include("forum.urls")),
     # path('users/', views.UserViewSet.as_view({'get': 'retrieve'})),
     # path('groups/', views.GroupViewSet.as_view({'get': 'retrieve'}))
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
