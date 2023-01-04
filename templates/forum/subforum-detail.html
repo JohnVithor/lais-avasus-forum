@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}SubForum{% endblock %}
+
+{% block content %}
+<h2>{{ object.title }}</h2>
+<p><strong>Professor Responsável:</strong> <a href="">{{ object.creator }}</a></p>
+<p><strong>Categoria:</strong> {{ object.category }}</p>
+<p><strong>Criado em:</strong> {{ object.created_at }}</p>
+<p><strong>Descrição:</strong> {{ object.description }}</p>
+<p><strong>Quantidade de tópicos:</strong> {{ object.topic_set.all.count }}</p>
+<table>
+  <tr>
+    <th>Titúlo</th>
+    <th>Professor Responsável</th>
+    <th>Criado em</th>
+  </tr>
+  {% for topic in object.sorted_topics %}
+    <tr>
+      <td><a href="/forum/topic/{{ topic.id }}">{{ topic.title }}</a></td>
+      <td>{{topic.creator}}</td>
+      <td>{{topic.created_at}}</td>
+    </tr>
+  {% endfor %}
+</table> 
+<button type="button">
+  <a href="{% url 'home' %}">Voltar para a tela inicial</a>
+</button> 
+{% endblock %}

@@ -21,13 +21,24 @@
         <a href="{% url 'logout' %}">Log Out</a>
     </button>  
     <br/>
-    Subfóruns associados:
-    <br/>
+    <h3>Subfóruns associados:</h3>
     {% if user.is_staff %}
+        <table>
+        <tr>
+          <th>Titúlo</th>
+          <th>Descrição</th>
+          <th>Professor Responsável</th>
+          <th>Criado em</th>
+        </tr>
         {% for field in user.created_subforuns.all %}
-            {{ field }}
-            <br/>
+          <tr>
+            <td><a href="/forum/subforum/{{ field.id }}">{{ field.title }}</a></td>
+            <td>{{ field.description }}</td>
+            <td>{{ field.creator }}</td>
+            <td>{{ field.created_at }}</td>
+          </tr>
         {% endfor %}
+        </table> 
         <br/>
         <button type="button">
             <!-- <a href="{% url 'logout' %}">Cadastrar novo forum</a> -->
