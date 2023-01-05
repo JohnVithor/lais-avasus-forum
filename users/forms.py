@@ -33,7 +33,6 @@ class StudentRegisterForm(forms.ModelForm):
         Verify cpf is valid.
         '''
         cpf = self.cleaned_data.get('cpf')
-        cpf = cpf.replace('.', '').replace('-', '')
         qs = User.objects.filter(cpf=cpf)
         if qs.exists():
             raise forms.ValidationError("CPF já está em uso")
@@ -81,34 +80,57 @@ class RegisterForm(forms.ModelForm):
     The default 
 
     """
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    # password = forms.CharField(widget=forms.PasswordInput)
+    # password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city']
+
+    def digit_generator(self, cpf, m):
+        d = 0
+        for n in range(m - 1):
+            d = d + int(cpf[n]) * m
+            m = m - 1
+        digit = 11 - d % 11
+        return 0 if digit > 9 else digit
 
     def clean_cpf(self):
         '''
         Verify cpf is valid.
         '''
         cpf = self.cleaned_data.get('cpf')
-        cpf = self.cpf.replace('.', '').replace('-', '')
         qs = User.objects.filter(cpf=cpf)
         if qs.exists():
-            raise forms.ValidationError("cpf is alredy on use")
+            raise forms.ValidationError("CPF já está em uso")
+        if len(cpf) != 11:
+            raise forms.ValidationError('CPF deve conter 11 números')
+        d1 = self.digit_generator(cpf, 10)
+        d2 = self.digit_generator(cpf, 11)
+        if cpf[-2:] != f'{d1}{d2}':
+            raise forms.ValidationError('Número de CPF inválido')
         return cpf
 
-    def clean(self):
+    def clean_birth_date(self):
         '''
-        Verify both passwords match.
+        Verify birth date is valid.
         '''
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        password_2 = cleaned_data.get("password_2")
-        if password is not None and password != password_2:
-            self.add_error("password_2", "Your passwords must match")
-        return cleaned_data
+        birth_date = self.cleaned_data.get('birth_date')
+        age = (date.today() - birth_date).days / 365
+        if age < 18:
+            raise forms.ValidationError('Apenas maiores de 18 anos podem se cadastrar')
+        return birth_date
+
+    # def clean(self):
+    #     '''
+    #     Verify both passwords match.
+    #     '''
+    #     cleaned_data = super().clean()
+    #     # password = cleaned_data.get("password")
+    #     # password_2 = cleaned_data.get("password_2")
+    #     # if password is not None and password != password_2:
+    #         # self.add_error("password_2", "Your passwords must match")
+    #     return cleaned_data
 
     def save(self, commit=True):
         # Save the provided password in hashed format
@@ -124,26 +146,61 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     password = forms.CharField(widget=forms.PasswordInput)
-    password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    # password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city']
 
-    def clean(self):
+    def digit_generator(self, cpf, m):
+        d = 0
+        for n in range(m - 1):
+            d = d + int(cpf[n]) * m
+            m = m - 1
+        digit = 11 - d % 11
+        return 0 if digit > 9 else digit
+
+    def clean_cpf(self):
         '''
-        Verify both passwords match.
+        Verify cpf is valid.
         '''
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        password_2 = cleaned_data.get("password_2")
-        if password is not None and password != password_2:
-            self.add_error("password_2", "Your passwords must match")
-        return cleaned_data
+        cpf = self.cleaned_data.get('cpf')
+        qs = User.objects.filter(cpf=cpf)
+        if qs.exists():
+            raise forms.ValidationError("CPF já está em uso")
+        if len(cpf) != 11:
+            raise forms.ValidationError('CPF deve conter 11 números')
+        d1 = self.digit_generator(cpf, 10)
+        d2 = self.digit_generator(cpf, 11)
+        if cpf[-2:] != f'{d1}{d2}':
+            raise forms.ValidationError('Número de CPF inválido')
+        return cpf
+
+    def clean_birth_date(self):
+        '''
+        Verify birth date is valid.
+        '''
+        birth_date = self.cleaned_data.get('birth_date')
+        age = (date.today() - birth_date).days / 365
+        if age < 18:
+            raise forms.ValidationError('Apenas maiores de 18 anos podem se cadastrar')
+        return birth_date
+
+    # def clean(self):
+    #     '''
+    #     Verify both passwords match.
+    #     '''
+    #     cleaned_data = super().clean()
+    #     password = cleaned_data.get("password")
+    #     password_2 = cleaned_data.get("password_2")
+    #     if password is not None and password != password_2:
+    #         self.add_error("password_2", "Your passwords must match")
+    #     return cleaned_data
 
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super().save(commit=False)
+        user.birth_date = "2000-01-01"
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
