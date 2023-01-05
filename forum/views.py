@@ -2,9 +2,10 @@ from rest_framework import viewsets, permissions
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from .serializers import CategorySerializer, SubForumSerializer, TopicSerializer
-from .models import Category, SubForum, Topic
-from .forms import SubForumRegisterForm, TopicRegisterForm
+from .models import Category, SubForum, Topic, TopicResponse
+from .forms import SubForumRegisterForm, TopicRegisterForm, TopicResponseRegisterForm
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -34,11 +35,11 @@ class TopicViewSet(viewsets.ModelViewSet):
 
 
 
-class SubForumDetailView(DetailView):
+class SubForumInfoView(DetailView):
     model = SubForum
     template_name = 'forum/subforum-detail.html'
 
-class TopicDetailView(DetailView):
+class TopicInfoView(DetailView):
     model = Topic
     template_name = 'forum/topic-detail.html'
 
@@ -70,11 +71,11 @@ class TopicFormCreateView(CreateView):
     template_name = 'forum/topic-register.html'
 
     def get_initial(self):
-        self.success = self.kwargs.copy()
+        self.ctx = self.kwargs.copy()
         return self.kwargs
 
     def get_success_url(self):
-        return reverse_lazy('subforum-detail',args=(self.success['subforum'],))
+        return reverse_lazy('topic-info',args=(self.object.pk,))
 
     def get_form_kwargs(self):
        kwargs = super(TopicFormCreateView, self).get_form_kwargs()
@@ -83,6 +84,35 @@ class TopicFormCreateView(CreateView):
     
     def get_context_data(self, **kwargs):
         context = super(CreateView, self).get_context_data(**kwargs)
-        context['subforum'] = self.success['subforum']
-        print(context)
+        context['subforum'] = self.ctx['subforum']
         return context
+
+class TopicResponseFormCreateView(CreateView):
+    model = TopicResponse
+    form_class = TopicResponseRegisterForm
+    template_name = 'forum/topicresponse-register.html'
+
+    def get_initial(self):
+        self.ctx = self.kwargs.copy()
+        return self.kwargs
+
+    def get_success_url(self):
+        return reverse_lazy('topic-info',args=(self.ctx['topic'],))
+
+    def get_form_kwargs(self):
+       kwargs = super(TopicResponseFormCreateView, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super(CreateView, self).get_context_data(**kwargs)
+        context['topic'] = self.ctx['topic']
+        return context
+
+def close_topic(request, pk):
+    print(request)
+    if request.POST:
+        topic = Topic.objects.get(id=pk)
+        topic.is_closed = True
+        topic.save()
+        return redirect('topic-info', pk)

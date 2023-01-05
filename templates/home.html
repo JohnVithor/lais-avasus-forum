@@ -5,70 +5,70 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-{% if user.is_staff %}
-Olá Professor {{ user.name }}!
+    {% if user.is_staff %}
+        Olá Professor {{ user.name }}!
+    {% else %}
+        Olá aluno {{ user.name }}!
+    {% endif %}
+    <br />
+    CPF: {{ user.cpf }}
+    <br />
+    Data de nascimento: {{ user.birth_date }}
+    <br />
+    Idade: {{ user.age }} anos
+    <br />
+    <button type="button">
+        <a href="{% url 'logout' %}">Log Out</a>
+    </button>
+    <br />
+    <h3>Subfóruns associados:</h3>
+    {% if user.is_staff %}
+        <table>
+            <tr>
+                <th>Titúlo</th>
+                <th>Descrição</th>
+                <th>Professor Responsável</th>
+                <th>Criado em</th>
+            </tr>
+            {% for field in user.created_subforuns.all %}
+            <tr>
+                <td><a href="/forum/subforum/{{ field.id }}">{{ field.title }}</a></td>
+                <td>{{ field.description }}</td>
+                <td>{{ field.creator }}</td>
+                <td>{{ field.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br />
+        <button type="button">
+            <a href="{% url 'subforum-create-form' %}">Criar novo subfórum</a>
+        </button>
+    {% else %}
+        <table>
+            <tr>
+                <th>Titúlo</th>
+                <th>Descrição</th>
+                <th>Professor Responsável</th>
+                <th>Criado em</th>
+            </tr>
+            {% for field in user.subforum_set.all %}
+            <tr>
+                <td><a href="{% url 'subforum-info' field.id %}">{{ field.title }}</a></td>
+                <td>{{ field.description }}</td>
+                <td>{{ field.creator }}</td>
+                <td>{{ field.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br />
+    {% endif %}
 {% else %}
-Olá aluno {{ user.name }}!
-{% endif %}
-<br />
-CPF: {{ user.cpf }}
-<br />
-Data de nascimento: {{ user.birth_date }}
-<br />
-Idade: {{ user.age }} anos
-<br />
-<button type="button">
-    <a href="{% url 'logout' %}">Log Out</a>
-</button>
-<br />
-<h3>Subfóruns associados:</h3>
-{% if user.is_staff %}
-<table>
-    <tr>
-        <th>Titúlo</th>
-        <th>Descrição</th>
-        <th>Professor Responsável</th>
-        <th>Criado em</th>
-    </tr>
-    {% for field in user.created_subforuns.all %}
-    <tr>
-        <td><a href="/forum/subforum/{{ field.id }}">{{ field.title }}</a></td>
-        <td>{{ field.description }}</td>
-        <td>{{ field.creator }}</td>
-        <td>{{ field.created_at }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<br />
-<button type="button">
-    <a href="{% url 'subforum-create-form' %}">Criar novo subfórum</a>
-</button>
-{% else %}
-<table>
-    <tr>
-        <th>Titúlo</th>
-        <th>Descrição</th>
-        <th>Professor Responsável</th>
-        <th>Criado em</th>
-    </tr>
-    {% for field in user.subforum_set.all %}
-    <tr>
-        <td><a href="/forum/subforum/{{ field.id }}">{{ field.title }}</a></td>
-        <td>{{ field.description }}</td>
-        <td>{{ field.creator }}</td>
-        <td>{{ field.created_at }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<br />
-{% endif %}
-{% else %}
-<p>Você não está logado</p>
-<button type="button">
-    <a href="{% url 'login' %}">Entrar</a>
-</button>
-<button type="button">
-    <a href="{% url 'signup-student' %}">Cadastre-se</a>
-</button>
+    <p>Você não está logado</p>
+    <button type="button">
+        <a href="{% url 'login' %}">Entrar</a>
+    </button>
+    <button type="button">
+        <a href="{% url 'signup-student' %}">Cadastre-se</a>
+    </button>
 {% endif %}
 {% endblock %}

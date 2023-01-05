@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import SubForum, Topic
+from .models import SubForum, Topic, TopicResponse
 
 class SubForumRegisterForm(forms.ModelForm):
 
@@ -35,7 +35,7 @@ class TopicRegisterForm(forms.ModelForm):
     """
     class Meta:
         model = Topic
-        fields = ['title', 'content', 'is_closed']
+        fields = ['title', 'content']
 
     def save(self, commit=True):
         topic = super().save(commit=False)
@@ -45,3 +45,25 @@ class TopicRegisterForm(forms.ModelForm):
         if commit:
             topic.save()
         return topic
+
+class TopicResponseRegisterForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        self.topic = Topic.objects.get(pk=kwargs.pop('initial').pop('topic'))
+        super(TopicResponseRegisterForm, self).__init__(*args, **kwargs)
+    """
+    The TopicResponse Register Form 
+
+    """
+    class Meta:
+        model = TopicResponse
+        fields = ['content']
+
+    def save(self, commit=True):
+        response = super().save(commit=False)
+        response.creator = self.user
+        response.topic = self.topic
+        if commit:
+            response.save()
+        return response

@@ -50,11 +50,22 @@ class Topic(models.Model):
     updated_at = models.DateTimeField('Atualizado em', auto_now=True)
     
     def __str__(self) -> str:
-        return self.title
+        return "[Trancado] " + self.title if self.is_closed else self.title
 
     @property
     def sorted_responses(self):
         return self.topicresponse_set.order_by('-created_at')
+    
+    @property
+    def qtd_responses(self):
+        return self.topicresponse_set.all().count()
+    
+    @property
+    def datetime_last_response(self):
+        resps = self.topicresponse_set.order_by('created_at').all() 
+        if (len(resps) > 0):
+            return resps[0].created_at
+        return self.updated_at
 
 class TopicResponse(models.Model):
     content = models.TextField('Resposta', help_text='Informe a resposta ao tópico')

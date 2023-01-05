@@ -16,19 +16,23 @@
 <table>
   <tr>
     <th>Titúlo</th>
-    <th>Professor Responsável</th>
+    <th>Autor</th>
     <th>Criado em</th>
+    <th>Quantidade de respostas</th>
+    <th>Última resposta</th>
   </tr>
   {% for topic in object.sorted_topics %}
     <tr>
-      <td><a href="/forum/topic/{{ topic.id }}">{{ topic.title }}</a></td>
+      <td><a href="{% url 'topic-info' topic.id %}">{{ topic }}</a></td>
       <td>{{topic.creator}}</td>
       <td>{{topic.created_at}}</td>
+      <td>{{topic.qtd_responses}}</td>
+      <td>{{topic.datetime_last_response}}</td>
     </tr>
   {% endfor %}
 </table> 
 <button type="button">
-  <a href="{% url 'topic-create_form' object.pk %}">Cadastrar novo tópico</a>
+  <a href="{% url 'topic-create-form' object.pk %}">Cadastrar novo tópico</a>
 </button> 
 <button type="button">
   <a href="{% url 'home' %}">Voltar para a tela inicial</a>
