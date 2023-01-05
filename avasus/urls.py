@@ -29,7 +29,7 @@ router.register(r'api/subforuns', forum_views.SubForumViewSet)
 router.register(r'api/topics', forum_views.TopicViewSet)
 
 
-urlpatterns = [
+urlpatterns = router.urls + [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path("accounts/", include("users.urls")),
@@ -38,4 +38,4 @@ urlpatterns = [
     # path('users/', views.UserViewSet.as_view({'get': 'retrieve'})),
     # path('groups/', views.GroupViewSet.as_view({'get': 'retrieve'}))
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-] + router.urls
+]

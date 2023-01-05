@@ -28,6 +28,9 @@
   {% endfor %}
 </table> 
 <button type="button">
+  <a href="{% url 'topic-create_form' object.pk %}">Cadastrar novo tópico</a>
+</button> 
+<button type="button">
   <a href="{% url 'home' %}">Voltar para a tela inicial</a>
 </button> 
 {% endblock %}

@@ -1,7 +1,6 @@
 from django import forms
-from datetime import date
 
-from .models import SubForum
+from .models import SubForum, Topic
 
 class SubForumRegisterForm(forms.ModelForm):
 
@@ -16,15 +15,6 @@ class SubForumRegisterForm(forms.ModelForm):
         model = SubForum
         fields = ['title', 'description', 'category', 'students']
 
-    # def clean(self):
-    #     '''
-    #     Add creator of subforum and activate it.
-    #     '''
-    #     cleaned_data = super().clean()
-    #     cleaned_data["creator"] = self.user
-    #     cleaned_data["is_active"] = True
-    #     return cleaned_data
-
     def save(self, commit=True):
         subforum = super().save(commit=False)
         subforum.creator = self.user
@@ -32,3 +22,26 @@ class SubForumRegisterForm(forms.ModelForm):
         if commit:
             subforum.save()
         return subforum
+
+class TopicRegisterForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        self.subforum = SubForum.objects.get(pk=kwargs.pop('initial').pop('subforum'))
+        super(TopicRegisterForm, self).__init__(*args, **kwargs)
+    """
+    The Topic Register Form 
+
+    """
+    class Meta:
+        model = Topic
+        fields = ['title', 'content', 'is_closed']
+
+    def save(self, commit=True):
+        topic = super().save(commit=False)
+        topic.creator = self.user
+        topic.subforum = self.subforum
+        topic.is_active = True
+        if commit:
+            topic.save()
+        return topic

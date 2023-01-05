@@ -44,10 +44,22 @@ Idade: {{ user.age }} anos
     <a href="{% url 'subforum-create-form' %}">Criar novo subfórum</a>
 </button>
 {% else %}
-{% for field in user.subforum_set.all %}
-{{ field }}
-<br />
-{% endfor %}
+<table>
+    <tr>
+        <th>Titúlo</th>
+        <th>Descrição</th>
+        <th>Professor Responsável</th>
+        <th>Criado em</th>
+    </tr>
+    {% for field in user.subforum_set.all %}
+    <tr>
+        <td><a href="/forum/subforum/{{ field.id }}">{{ field.title }}</a></td>
+        <td>{{ field.description }}</td>
+        <td>{{ field.creator }}</td>
+        <td>{{ field.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
 <br />
 {% endif %}
 {% else %}
