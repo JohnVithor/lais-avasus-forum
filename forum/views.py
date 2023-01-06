@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from .serializers import CategorySerializer, SubForumSerializer, TopicSerializer
+from .serializers import *
 from .models import Category, SubForum, Topic, TopicResponse
 from .forms import SubForumRegisterForm, TopicRegisterForm, TopicResponseRegisterForm
 from django.urls import reverse_lazy
@@ -27,10 +27,18 @@ class SubForumViewSet(viewsets.ModelViewSet):
 
 class TopicViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows subforuns to be viewed or edited.
+    API endpoint that allows topics to be viewed or edited.
     """
     queryset = Topic.objects.all().order_by('id')
     serializer_class = TopicSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class TopicResponseViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows topic responses to be viewed or edited.
+    """
+    queryset = TopicResponse.objects.all().order_by('id')
+    serializer_class = TopicResponseSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 

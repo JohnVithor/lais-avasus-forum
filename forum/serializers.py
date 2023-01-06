@@ -11,17 +11,17 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 class SubForumSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SubForum
-        fields = ['title', 'description', 'category', 'creator', 'students', 'is_active', 'created_at', 'updated_at']
+        fields = ['title', 'description', 'category', 'creator', 'students', 'topic_set', 'is_active', 'created_at', 'updated_at']
         ordering = ['-id']
         
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Topic
-        fields = ['title', 'content', 'subforum', 'creator', 'is_closed', 'is_active', 'created_at', 'updated_at']
+        fields = ['title', 'content', 'subforum', 'creator', 'is_closed', 'topicresponse_set', 'is_active', 'created_at', 'updated_at']
         ordering = ['-id']
 
 class TopicResponseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TopicResponse
-        fields = ['content', 'topic', 'creator', 'is_active', 'created_at']
+        fields = ['content', 'topic', 'creator', 'created_at']
         ordering = ['-id']

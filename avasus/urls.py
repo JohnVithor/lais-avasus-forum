@@ -27,6 +27,7 @@ router.register(r'api/users', user_views.UserViewSet)
 router.register(r'api/categories', forum_views.CategoryViewSet)
 router.register(r'api/subforuns', forum_views.SubForumViewSet)
 router.register(r'api/topics', forum_views.TopicViewSet)
+router.register(r'api/topicresponses', forum_views.TopicResponseViewSet)
 
 
 urlpatterns = [
