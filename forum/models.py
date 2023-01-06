@@ -1,6 +1,9 @@
 from django.db import models
 
 from users.models import CustomUser
+
+import markdown
+
 # Create your models here.
 
 class Category(models.Model):
@@ -66,6 +69,10 @@ class Topic(models.Model):
         if (len(resps) > 0):
             return resps[0].created_at
         return self.updated_at
+    
+    @property
+    def md_content(self):
+        return markdown.markdown(self.content)
 
 class TopicResponse(models.Model):
     content = models.TextField('Resposta', help_text='Informe a resposta ao tópico')
@@ -76,3 +83,7 @@ class TopicResponse(models.Model):
     
     def __str__(self) -> str:
         return self.content
+    
+    @property
+    def md_content(self):
+        return markdown.markdown(self.content)

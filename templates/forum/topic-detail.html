@@ -7,10 +7,10 @@
 <p><strong>Autor:</strong> <a href="">{{ object.creator }}</a></p>
 <p><strong>Criado em:</strong> {{ object.created_at }}</p>
 <h3>Conteúdo</h3>
-<p> {{ object.content }} </p>
+<p> {{ object.md_content|safe }} </p>
 <h3>Respostas</h3>
 {% for resp in object.sorted_responses %}
-  {{resp.content}}
+  {{resp.md_content|safe}}
   <br>
   <p><strong>Autor: </strong> {{resp.creator}} <strong>Criado em: </strong> {{resp.created_at}}</p>
   <br>
@@ -30,6 +30,12 @@
   <button type="button">
     <a href="{% url 'response-create-form' topic=object.id %}">Responder Tópico</a> 
   </button> 
-{% endif %}
-
+{% else %}
+  {% if user.is_staff %}
+  <form action="{{object.id}}/open" method="post">
+    {% csrf_token %}
+    <button type="submit">Abrir tópico</button> 
+  </form>
+  {% endif %}
+{% endif %} 
 {% endblock %}

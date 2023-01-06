@@ -110,9 +110,15 @@ class TopicResponseFormCreateView(CreateView):
         return context
 
 def close_topic(request, pk):
-    print(request)
     if request.POST:
         topic = Topic.objects.get(id=pk)
         topic.is_closed = True
+        topic.save()
+        return redirect('topic-info', pk)
+
+def open_topic(request, pk):
+    if request.POST:
+        topic = Topic.objects.get(id=pk)
+        topic.is_closed = False
         topic.save()
         return redirect('topic-info', pk)
