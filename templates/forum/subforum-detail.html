@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>{{ object.title }}</h2>
-<p><strong>Professor Responsável:</strong> <a href="">{{ object.creator }}</a></p>
+<p><strong>Professor Responsável:</strong> <a href="{% url 'user-info' pk=object.creator.pk %}">{{ object.creator }}</a></p>
 <p><strong>Categoria:</strong> {{ object.category }}</p>
 <p><strong>Criado em:</strong> {{ object.created_at }}</p>
 <p><strong>Descrição:</strong> {{ object.description }}</p>

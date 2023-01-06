@@ -61,3 +61,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name if self.social_name == '' else self.social_name 
+    
+    @property
+    def call_name(self):
+        return self.name if self.social_name == '' else self.social_name 
+    
+    @property
+    def qtd_subforums(self):
+        return self.created_subforuns.all().count() + self.subforum_set.all().count()

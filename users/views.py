@@ -6,6 +6,7 @@ from .serializers import UserSerializer
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic.detail import DetailView
 
 from .forms import StudentRegisterForm
 
@@ -24,3 +25,7 @@ class SignUpView(generic.CreateView):
     form_class = StudentRegisterForm
     success_url = reverse_lazy("signup-success")
     template_name = "registration/signup.html"
+
+class UserInfoView(DetailView):
+    model = CustomUser
+    template_name = 'user-detail.html'
