@@ -139,3 +139,10 @@ def open_topic(request, pk):
         topic.is_closed = False
         topic.save()
         return redirect('topic-info', pk)
+
+def remove_response(request, pk, response):
+    if request.POST:
+        topicresponse = TopicResponse.objects.get(id=response)
+        topicresponse.is_active = False
+        topicresponse.save()
+        return redirect('topic-info', pk)

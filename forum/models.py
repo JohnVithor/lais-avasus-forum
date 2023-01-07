@@ -69,7 +69,7 @@ class Topic(models.Model):
 
     @property
     def sorted_responses(self):
-        return self.topicresponse_set.order_by('created_at')
+        return self.topicresponse_set.filter(is_active=True).order_by('created_at')
     
     @property
     def qtd_responses(self):
@@ -95,7 +95,7 @@ class TopicResponse(models.Model):
 
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Autor")
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
-    
+    is_active = models.BooleanField('Ativo', default=True, help_text='Indica se a resposta está ativa')
     def __str__(self) -> str:
         return self.content_preview
     

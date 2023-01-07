@@ -13,4 +13,5 @@ urlpatterns = [
     path('topic/<int:topic>/new_response', TopicResponseFormCreateView.as_view(), name="response-create-form"),
     path('topic/<int:pk>/close', close_topic, name="topic-close"),
     path('topic/<int:pk>/open', open_topic, name="topic-open"),
+    path('topic/<int:pk>/remove/<int:response>', remove_response, name="remove-response"),
 ]

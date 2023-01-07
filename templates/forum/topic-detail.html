@@ -14,6 +14,12 @@
   <br>
   <p><strong>Autor: </strong> {{resp.creator}} <strong>Criado em: </strong> {{resp.created_at}}</p>
   <br>
+  {% if user.is_professor %}
+    <form action="{{object.id}}/remove/{{resp.id}}" method="post">
+      {% csrf_token %}
+      <button type="submit">Remover resposta</button> 
+    </form>
+  {% endif %} 
 {% endfor %}
 
 <button type="button">
