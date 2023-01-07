@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from .serializers import *
 from .models import Category, SubForum, Topic, TopicResponse
-from .forms import SubForumRegisterForm, TopicRegisterForm, TopicResponseRegisterForm
+from .forms import SubForumRegisterForm, SubForumEditForm, TopicRegisterForm, TopicResponseRegisterForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
@@ -64,14 +64,23 @@ class SubForumFormCreateView(CreateView):
     
 class SubForumFormEditView(UpdateView):
     model = SubForum
-    form_class = SubForumRegisterForm
-    template_name = 'forum/subforum-register.html'
+    form_class = SubForumEditForm
+    template_name = 'forum/subforum-edit.html'
     success_url = reverse_lazy("home")
 
     def get_form_kwargs(self):
        kwargs = super(SubForumFormEditView, self).get_form_kwargs()
        kwargs.update({'user': self.request.user})
        return kwargs
+    
+    def get_initial(self):
+        self.ctx = self.kwargs.copy()
+        return self.kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(SubForumFormEditView, self).get_context_data(**kwargs)
+        context['pk'] = self.ctx['pk']
+        return context
 
 class TopicFormCreateView(CreateView):
     model = Topic

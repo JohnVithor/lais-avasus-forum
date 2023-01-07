@@ -9,20 +9,22 @@ class CustomUserAdmin(UserAdmin):
     add_form = UserAdminCreationForm
     form = UserAdminChangeForm
     model = CustomUser
-    list_display = ('cpf', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city')
-    list_filter = ('cpf', 'name', 'social_name')
+    list_display = ('cpf', 'name', 'social_name', 'birth_date', 'is_professor', 'state', 'city')
+    list_filter = ('cpf', 'name', 'social_name', 'birth_date')
     fieldsets = (
-        (None, {'fields': ('cpf', 'name', 'social_name', 'birth_date', 'state', 'city', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+        (None, {
+            'classes': ('wide',),
+            'fields': ('cpf', 'name', 'social_name', 'birth_date', 'state', 'city', 'password', 'is_professor', 'is_active')}
+        ),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('cpf', 'password', 'is_staff', 'is_active')}
+            'fields': ('cpf', 'name', 'social_name', 'birth_date', 'state', 'city', 'password', 'password_2', 'is_professor', 'is_active')}
         ),
     )
     search_fields = ('cpf', 'name', 'social_name')
-    ordering = ('name',)
+    ordering = ('name', 'birth_date')
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

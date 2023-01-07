@@ -5,7 +5,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    {% if user.is_staff %}
+    {% if user.is_professor %}
         Olá Professor {{ user.name }}!
     {% else %}
         Olá aluno {{ user.name }}!
@@ -22,7 +22,7 @@
     </button>
     <br />
     <h3>Subfóruns associados:</h3>
-    {% if user.is_staff %}
+    {% if user.is_professor %}
         <table>
             <tr>
                 <th>Titúlo</th>
@@ -61,6 +61,13 @@
             {% endfor %}
         </table>
         <br />
+        {% if user.subforum_set.all.count == 0 %}
+            Parece que você não foi incluído em nenhum fórum ainda.
+            <br />
+            Solicite ao seu professor que te inclua.
+            <br />
+        {% endif %}
+        
     {% endif %}
 {% else %}
     <p>Você não está logado</p>

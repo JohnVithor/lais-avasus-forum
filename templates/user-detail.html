@@ -3,7 +3,7 @@
 {% block title %}{{ object }}{% endblock %}
 
 {% block content %}
-{% if object.is_staff %}
+{% if object.is_professor %}
     <h2>Professor {{ object.call_name }}</h2>
 {% else %}
     <h2>Aluno {{ object.call_name }}</h2>

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from datetime import date
+import datetime
 
 User = get_user_model()
 
@@ -17,7 +17,7 @@ class StudentRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        exclude = ['is_staff']
+        exclude = ['is_professor']
         fields = ['cpf', 'name', 'social_name', 'birth_date', 'state', 'city']
 
     def digit_generator(self, cpf, m):
@@ -49,7 +49,7 @@ class StudentRegisterForm(forms.ModelForm):
         Verify birth date is valid.
         '''
         birth_date = self.cleaned_data.get('birth_date')
-        age = (date.today() - birth_date).days / 365
+        age = (datetime.date.today() - birth_date).days / 365
         if age < 18:
             raise forms.ValidationError('Apenas maiores de 18 anos podem se cadastrar')
         return birth_date
@@ -85,7 +85,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city']
+        fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_professor', 'state', 'city']
 
     def digit_generator(self, cpf, m):
         d = 0
@@ -116,7 +116,7 @@ class RegisterForm(forms.ModelForm):
         Verify birth date is valid.
         '''
         birth_date = self.cleaned_data.get('birth_date')
-        age = (date.today() - birth_date).days / 365
+        age = (datetime.date.today() - birth_date).days / 365
         if age < 18:
             raise forms.ValidationError('Apenas maiores de 18 anos podem se cadastrar')
         return birth_date
@@ -146,11 +146,11 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     password = forms.CharField(widget=forms.PasswordInput)
-    # password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city']
+        fields = ['cpf', 'name', 'social_name', 'birth_date', 'is_professor', 'state', 'city']
 
     def digit_generator(self, cpf, m):
         d = 0
@@ -181,26 +181,25 @@ class UserAdminCreationForm(forms.ModelForm):
         Verify birth date is valid.
         '''
         birth_date = self.cleaned_data.get('birth_date')
-        age = (date.today() - birth_date).days / 365
+        age = (datetime.date.today() - birth_date).days / 365
         if age < 18:
             raise forms.ValidationError('Apenas maiores de 18 anos podem se cadastrar')
         return birth_date
 
-    # def clean(self):
-    #     '''
-    #     Verify both passwords match.
-    #     '''
-    #     cleaned_data = super().clean()
-    #     password = cleaned_data.get("password")
-    #     password_2 = cleaned_data.get("password_2")
-    #     if password is not None and password != password_2:
-    #         self.add_error("password_2", "Your passwords must match")
-    #     return cleaned_data
+    def clean(self):
+        '''
+        Verify both passwords match.
+        '''
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_2 = cleaned_data.get("password_2")
+        if password is not None and password != password_2:
+            self.add_error("password_2", "Your passwords must match")
+        return cleaned_data
 
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super().save(commit=False)
-        user.birth_date = "2000-01-01"
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
@@ -216,7 +215,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['cpf', 'password', 'is_active', 'name', 'social_name', 'birth_date', 'is_staff', 'state', 'city']
+        fields = ['cpf', 'password', 'is_active', 'name', 'social_name', 'birth_date', 'is_professor', 'state', 'city']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.

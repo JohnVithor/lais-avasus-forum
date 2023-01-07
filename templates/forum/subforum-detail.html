@@ -9,9 +9,12 @@
 <p><strong>Criado em:</strong> {{ object.created_at }}</p>
 <p><strong>Descrição:</strong> {{ object.description }}</p>
 <p><strong>Quantidade de tópicos:</strong> {{ object.topic_set.all.count }}</p>
-{% if user.is_staff %}
+{% if user.is_professor %}
 <p><strong>Quantidade de alunos vinculados:</strong> {{ object.students.all.count }}</p>
 <p><strong>Quantidade de postagens em todos os tópicos:</strong> {{ object.qtd_posts }}</p>
+<button type="button">
+  <a href="{% url 'subforum-edit-form' object.pk %}">Atualizar SubForum</a>
+</button> 
 {% endif %}  
 <table>
   <tr>

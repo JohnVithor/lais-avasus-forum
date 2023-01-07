@@ -5,7 +5,7 @@ from rest_framework import permissions
 from .serializers import UserSerializer
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 
 from .forms import StudentRegisterForm
@@ -21,7 +21,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class SignUpView(generic.CreateView):
+class SignUpView(CreateView):
+    model = CustomUser
     form_class = StudentRegisterForm
     success_url = reverse_lazy("signup-success")
     template_name = "registration/signup.html"

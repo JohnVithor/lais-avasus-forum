@@ -21,7 +21,7 @@
 </button> 
 
 {% if not object.is_closed %}
-  {% if user.is_staff %}
+  {% if user.is_professor %}
   <form action="{{object.id}}/close" method="post">
     {% csrf_token %}
     <button type="submit">Trancar tópico</button> 
@@ -31,7 +31,7 @@
     <a href="{% url 'response-create-form' topic=object.id %}">Responder Tópico</a> 
   </button> 
 {% else %}
-  {% if user.is_staff %}
+  {% if user.is_professor %}
   <form action="{{object.id}}/open" method="post">
     {% csrf_token %}
     <button type="submit">Abrir tópico</button> 

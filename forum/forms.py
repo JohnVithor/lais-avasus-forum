@@ -15,10 +15,45 @@ class SubForumRegisterForm(forms.ModelForm):
         model = SubForum
         fields = ['title', 'description', 'category', 'students']
 
+    def clean(self):
+        '''
+        Verify both passwords match.
+        '''
+        cleaned_data = super().clean()
+        self.students = cleaned_data["students"]
+        return cleaned_data
+
     def save(self, commit=True):
         subforum = super().save(commit=False)
         subforum.creator = self.user
-        subforum.is_active = True
+        if commit:
+            subforum.save()
+        return subforum
+
+class SubForumEditForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(SubForumEditForm, self).__init__(*args, **kwargs)
+    """
+    The SubForum Edit Form 
+
+    """
+    class Meta:
+        model = SubForum
+        fields = ['title', 'description', 'category', 'students']
+
+    def clean(self):
+        '''
+        Verify both passwords match.
+        '''
+        cleaned_data = super().clean()
+        self.students = cleaned_data["students"]
+        return cleaned_data
+
+    def save(self, commit=True):
+        subforum = super().save(commit=False)
+        subforum.students.set(self.students)
         if commit:
             subforum.save()
         return subforum
