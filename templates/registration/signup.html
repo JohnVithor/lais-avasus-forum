@@ -4,15 +4,21 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-  <h2>Sign up</h2>
+<div style="text-align: center;">
+  <h1>Sign up</h1>
+  <div style="display: inline-block; text-align: left;">
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
       <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
+        {{ field.label_tag }}
         {% if field.help_text %}
+          <br>
           <small style="color: grey">{{ field.help_text }}</small>
+          <br>
+          {{ field }}
+         {% else %}
+         {{ field }}
         {% endif %}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
@@ -20,15 +26,20 @@
       </p>
     {% endfor %}
     <button type="submit">Sign up</button>
+    <button type="button">
+      <a href="{% url 'home' %}">Voltar para a tela inicial</a>
+    </button> 
   </form>
-  <button type="button">
-    <a href="{% url 'home' %}">Voltar para a tela inicial</a>
-  </button> 
+</div>
+</div>
   <style>
     #id_username {
       display: flex;
     }
     #id_password {
+      display: flex;
+    }
+    #id_password_2 {
       display: flex;
     }
   </style>

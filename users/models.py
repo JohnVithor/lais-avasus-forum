@@ -17,7 +17,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     name = models.CharField('Nome', max_length=100, help_text='Informe o nome')
     social_name = models.CharField('Nome social', max_length=100, blank=True, help_text='Informe o nome social (opcional)')
-    birth_date = models.DateField('Data de nascimento', help_text='Informe a data de nascimento')
+    birth_date = models.DateField('Data de nascimento', help_text='Informe a data de nascimento dd/mm/aaaa')
     is_professor = models.BooleanField('Professor', default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
