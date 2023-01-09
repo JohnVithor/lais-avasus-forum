@@ -4,24 +4,28 @@
 {% block title %}Cadastro de Tópico{% endblock %}
 
 {% block content %}
+<div style="text-align: center;">
   <h2>Cadastro de Tópico</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit">Salvar</button>
-  </form>
-  <button type="button">
-    <a href="{% url 'subforum-info' pk=subforum %}">Voltar para o forum</a>
-  </button> 
+  <div style="display: inline-block; text-align: left;">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button type="submit">Salvar</button>
+      <button type="button">
+        <a href="{% url 'subforum-info' pk=subforum %}">Voltar para o forum</a>
+      </button> 
+    </form>
+  </div>
+</div>
 {% endblock %}

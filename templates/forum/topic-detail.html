@@ -3,45 +3,90 @@
 {% block title %}Topic{% endblock %}
 
 {% block content %}
-<h2>{{ object }}</h2>
-<p><strong>Autor:</strong> <a href="{% url 'user-info' pk=object.creator.pk %}">{{ object.creator }}</a></p>
-<p><strong>Criado em:</strong> {{ object.created_at }}</p>
-<h3>Conteúdo</h3>
-<p> {{ object.md_content|safe }} </p>
-<h3>Respostas</h3>
-{% for resp in object.sorted_responses %}
-  {{resp.md_content|safe}}
-  <br>
-  <p><strong>Autor: </strong> {{resp.creator}} <strong>Criado em: </strong> {{resp.created_at}}</p>
-  <br>
+<div style="text-align: center;">
+  <p>
+    <button type="button">
+      <a href="{% url 'subforum-info' pk=object.subforum.id %}">Voltar para o forum</a>
+    </button>
+    {% if not object.is_closed %}
+      <button type="button">
+        <a href="{% url 'response-create-form' topic=object.id %}">Responder Tópico</a>
+      </button>  
+      {% if user.is_professor %}
+        <form action="{{object.id}}/close" method="post">
+          {% csrf_token %}
+          <button type="submit">Trancar tópico</button>
+        </form>
+      {% endif %}
+    {% else %}
+      {% if user.is_professor %}
+        <form action="{{object.id}}/open" method="post">
+          {% csrf_token %}
+          <button type="submit">Abrir tópico</button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </p>
+  <h1>{{ object }}</h1>
+  <div style="display: inline-block; text-align: left;">
+    <p>
+      <strong>Autor:</strong> <a href="{% url 'user-info' pk=object.creator.pk %}">{{ object.creator }}</a>
+      <strong>Criado em:</strong> {{ object.created_at }}
+    </p>
+    <h3>Conteúdo</h3>
+    <div style="word-wrap: break-word;">
+      <p> {{ object.md_content|safe }} </p>
+    </div>
+  <h2>Respostas</h2>
+  {% for resp in object.sorted_responses %}
+  <p>{{resp.md_content|safe}}</p>
   {% if user.is_professor %}
-    <form action="{{object.id}}/remove/{{resp.id}}" method="post">
+    <form  action="{{object.id}}/remove/{{resp.id}}" method="post">
       {% csrf_token %}
-      <button type="submit">Remover resposta</button> 
+      <p>
+        <strong>Autor: </strong> {{resp.creator}} <strong>Criado em: </strong> {{resp.created_at}}
+        <button type="submit">Remover resposta</button>
+      </p>
     </form>
-  {% endif %} 
-{% endfor %}
-
-<button type="button">
-  <a href="{% url 'subforum-info' pk=object.subforum.id %}">Voltar para o forum</a>
-</button> 
-
-{% if not object.is_closed %}
-  {% if user.is_professor %}
-  <form action="{{object.id}}/close" method="post">
-    {% csrf_token %}
-    <button type="submit">Trancar tópico</button> 
-  </form>
-  {% endif %} 
-  <button type="button">
-    <a href="{% url 'response-create-form' topic=object.id %}">Responder Tópico</a> 
-  </button> 
-{% else %}
-  {% if user.is_professor %}
-  <form action="{{object.id}}/open" method="post">
-    {% csrf_token %}
-    <button type="submit">Abrir tópico</button> 
-  </form>
+  {% else %}
+  <p>
+    <strong>Autor: </strong> {{resp.creator}} <strong>Criado em: </strong> {{resp.created_at}}
+  </p>
   {% endif %}
-{% endif %} 
+  <hr class="solid">
+  
+{% endfor %}
+  </div>
+  <p>
+    <button type="button">
+      <a href="{% url 'subforum-info' pk=object.subforum.id %}">Voltar para o forum</a>
+    </button>
+    {% if not object.is_closed %}
+      <button type="button">
+        <a href="{% url 'response-create-form' topic=object.id %}">Responder Tópico</a>
+      </button>  
+      {% if user.is_professor %}
+        <form action="{{object.id}}/close" method="post">
+          {% csrf_token %}
+          <button type="submit">Trancar tópico</button>
+        </form>
+      {% endif %}
+    {% else %}
+      {% if user.is_professor %}
+        <form action="{{object.id}}/open" method="post">
+          {% csrf_token %}
+          <button type="submit">Abrir tópico</button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </p>
+</div>
+
+<style>
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+
+</style>
+
 {% endblock %}

@@ -3,21 +3,24 @@
 {% block title %}{{ object }}{% endblock %}
 
 {% block content %}
+<div style="text-align: center;">
 {% if object.is_professor %}
     <h2>Professor {{ object.call_name }}</h2>
 {% else %}
     <h2>Aluno {{ object.call_name }}</h2>
 {% endif %}
-<p><strong>Nome:</strong> {{ object.name }}</p>
-<p><strong>Nome Social:</strong> {{ object.social_name }}</p>
-<p><strong>Idade:</strong> {{ object.age }}</p>
+<p>
+    <strong>Nome:</strong> {{ object.name }}
+    <strong>Nome Social:</strong> {{ object.social_name }}
+    <strong>Idade:</strong> {{ object.age }}
+</p>
 <p><strong>Usuário desde:</strong> {{ object.created_at }}</p>
 <p><strong>Quantidade de subfóruns que participa:</strong> {{ object.qtd_subforums }}</p>
 <p><strong>Quantidade de tópicos criados:</strong> {{ object.topic_set.all.count }}</p>
 <p><strong>Quantidade de respostas dadas:</strong> {{ object.topicresponse_set.all.count }}</p>
-
 <button type="button">
     <a href="{% url 'home' %}">Voltar para a tela inicial</a>
   </button> 
+</div>
 
 {% endblock %}

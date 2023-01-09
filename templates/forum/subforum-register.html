@@ -4,24 +4,28 @@
 {% block title %}Cadastro de Subforum{% endblock %}
 
 {% block content %}
-  <h2>Cadastro de Subforum </h2>
+<div style="text-align: center;">
+  <h1>Cadastro de Subforum </h1>
+  <div style="display: inline-block; text-align: left;">
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
       <p>
         {{ field.label_tag }}<br>
-        {{ field }}
         {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
+        <small style="color: grey">{{ field.help_text }}</small><br>
         {% endif %}
+        {{ field }}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
     {% endfor %}
     <button type="submit">Salvar</button>
+    <button type="button">
+      <a href="{% url 'home' %}">Voltar para a tela inicial</a>
+    </button> 
   </form>
-  <button type="button">
-    <a href="{% url 'home' %}">Voltar para a tela inicial</a>
-  </button> 
+  </div>
+</div>
 {% endblock %}

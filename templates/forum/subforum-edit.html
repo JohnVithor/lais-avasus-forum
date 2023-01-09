@@ -4,7 +4,9 @@
 {% block title %}Edição de Subforum{% endblock %}
 
 {% block content %}
-  <h2>Edição de Subforum </h2>
+<div style="text-align: center;">
+  <h1>Edição de Subforum </h1>
+  <div style="display: inline-block; text-align: left;">
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
@@ -20,8 +22,10 @@
       </p>
     {% endfor %}
     <button type="submit">Salvar</button>
+    <button type="button">
+      <a href="{% url 'subforum-info' pk=pk%}">Voltar para o forum</a>
+    </button> 
   </form>
-  <button type="button">
-    <a href="{% url 'subforum-info' pk=pk%}">Voltar para o forum</a>
-  </button> 
+</div>
+</div>
 {% endblock %}

@@ -3,14 +3,17 @@ from django import forms
 from .models import SubForum, Topic, TopicResponse
 
 class SubForumRegisterForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
-        super(SubForumRegisterForm, self).__init__(*args, **kwargs)
     """
     The SubForum Register Form 
 
     """
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(SubForumRegisterForm, self).__init__(*args, **kwargs)
+
+    field_order = ['title', 'category', 'students', 'description']
+
     class Meta:
         model = SubForum
         fields = ['title', 'description', 'category', 'students']
@@ -31,14 +34,15 @@ class SubForumRegisterForm(forms.ModelForm):
         return subforum
 
 class SubForumEditForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
-        super(SubForumEditForm, self).__init__(*args, **kwargs)
     """
     The SubForum Edit Form 
 
     """
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(SubForumEditForm, self).__init__(*args, **kwargs)
+
+    field_order = ['title', 'category', 'students', 'description']
     class Meta:
         model = SubForum
         fields = ['title', 'description', 'category', 'students']
